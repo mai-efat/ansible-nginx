@@ -156,4 +156,3 @@ The Ansible playbook (`nginx-setup.yml`) automates the following tasks:
   
 - **Accessing the Application**: After running the playbook, you should be able to access Nginx by navigating to the container’s IP address in your browser.
 
-Let me know if you need further customizations!
