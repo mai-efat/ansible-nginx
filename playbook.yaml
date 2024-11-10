@@ -1,0 +1,36 @@
+---
+- name: Configure Nginx on Web Server
+  hosts: my_hosts  # Ensure this matches your inventory group
+  become: true      # Use privilege escalation to perform tasks like installing packages and managing services
+  tasks:
+
+    - name: Update apt cache (Debian/Ubuntu)
+      apt:
+        update_cache: yes
+      
+
+    - name: Install latest Nginx
+      apt:
+        name: nginx
+        state: latest  # Ensures the latest version is installed
+    - name: Install Nginx package if it's not installed
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Copy index.html from controller to web server
+      ansible.builtin.copy:
+        src: /home/mai/ansible/index.html  # Path to the local index.html file on the controller machine
+        dest: /var/www/html/index.html
+        owner: www-data  # Set the owner to nginx user (adjust if needed)
+        group: www-data  # Set the group to nginx user (adjust if needed)
+        mode: '0644'
+    - name: Ensure Nginx service is started and enabled using SysVinit
+      sysvinit:
+        name: nginx  # The name of the service (e.g., nginx)
+        state: restarted  # Restart the service
+        enabled: yes  # Ensure it starts on boot
+    
+
+    
